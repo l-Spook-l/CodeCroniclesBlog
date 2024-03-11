@@ -1,6 +1,20 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+# from django.contrib.auth import models as auth_models
+
+
+# class User(auth_models.AbstractUser):
+#     """Моя модель для пользователя"""
+#     first_name = models.CharField(verbose_name="First name", max_length=255)
+#     last_name = models.CharField(verbose_name="Last name", max_length=255)
+#
+#     USERNAME_FIELD = "email"
+#     REQUIRED_FIELDS = ['first_name', 'last_name']
+#
+#     def __str__(self):
+#         return self.first_name
 
 
 class CategoryPost(models.Model):
@@ -33,6 +47,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
     photos = models.ManyToManyField(PostPhoto, blank=True)
     content = models.TextField(blank=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField(default=True)
@@ -63,4 +78,17 @@ class Post(models.Model):
         ordering = ['title', 'time_create']  # сортировка везде
     #     ordering = ['time_create', 'price', '-price']  # сортировка везде
 
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,)
+    text = models.TextField(max_length=5000)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.author.username
+
+    class Meta:
+        ordering = ['created_at']
 
