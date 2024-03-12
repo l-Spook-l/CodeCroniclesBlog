@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9x@okdt+d7&ke4+q4x*1i+=uxpta1zjct0#nbc$ed$6z!3ltw)'
+SECRET_KEY = 'django-insecure-9x@okbt+d7&ce8+q4x*5i+=uxpta1zjct0#nbc$ed$6i!3ltw)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -138,7 +138,7 @@ REST_FRAMEWORK = {
     # Для пагинации, они глобальны для всего проекта
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # количество записей на стр
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 1,
 
     # Для авторизации по djoser и JWT токену
     'DEFAULT_AUTHENTICATION_CLASSES': (
