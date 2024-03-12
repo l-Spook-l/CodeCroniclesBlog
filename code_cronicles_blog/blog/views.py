@@ -1,16 +1,12 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
-# from rest_framework.decorators import action
-# from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .permissions import OnlyAuthorPermission
 from .models import CategoryPost, Post, Comment
 from .serializer import PostListSerializer, CategorySerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import PostFilter
-# from rest_framework import generics, mixins, views
-# from django.core.exceptions import ObjectDoesNotExist
 
 
 class BlogAPILIstPagination(PageNumberPagination):
@@ -19,7 +15,7 @@ class BlogAPILIstPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class PostViewSet(viewsets.ModelViewSet):  # (mixins.ListModelMixin, viewsets.GenericViewSet)
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
     pagination_class = BlogAPILIstPagination
@@ -38,56 +34,14 @@ class PostViewSet(viewsets.ModelViewSet):  # (mixins.ListModelMixin, viewsets.Ge
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]
 
-    # @action(detail=True)
-    # def detail_post(self, request, *args, **kwargs):
-    #     post = self.get_object()
-    #     serializer = PostDetailSerializer(post)
-    #     return Response(serializer.data)
-
     def perform_create(self, serializer):
-        # Устанавливаем автора поста как текущего пользователя
         serializer.save(author=self.request.user)
-
-
-# class PostViewSet(viewsets.ModelViewSet):
-#                    (mixins.RetrieveModelMixin,
-#                    mixins.UpdateModelMixin,
-#                    mixins.DestroyModelMixin,
-#                    GenericViewSet):
-#     queryset = Post.objects.all()  # Берем все записи из нужной табл в БД
-#     serializer_class = PostSerializer  # подключаем DRF
-#     lookup_field = 'slug'
-#     permission_classes = [AllowAny, OnlyAuthorPermission]
-#
-#     def perform_create(self, serializer):
-#         # Устанавливаем автора поста как текущего пользователя
-#         serializer.save(author=self.request.user)
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CategoryPost.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     try:
-    #         response = super().dispatch(request, *args, **kwargs)
-    #     except Exception as e:
-    #         return self.response({'errorMessage': e.message}, status=400)
-    #
-    #     if isinstance(response, (dict, list)):
-    #         return self.response(response)
-    #     else:
-    #         return response
-
-    # def retrieve(self, request, *args, **kwargs):
-    #     try:
-    #         instance = self.get_object()
-    #     except ObjectDoesNotExist:
-    #         return Response({"error": "Category does not exist."}, status=status.HTTP_404_NOT_FOUND)
-    #
-    #     serializer = self.get_serializer(instance)
-    #     return Response(serializer.data)
 
 
 class PostListByCategory(viewsets.ReadOnlyModelViewSet):
