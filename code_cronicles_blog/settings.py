@@ -123,7 +123,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # for photos
-MEDIA_ROOT = path.join(BASE_DIR, 'media')  # ссылается на текущюю папку раб. проекта
+MEDIA_ROOT = path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 CORS_ALLOWED_ORIGINS = [
@@ -132,15 +132,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 REST_FRAMEWORK = {
-    # Бэкенды фильтров
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
-    # Для пагинации, они глобальны для всего проекта
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # количество записей на стр
-    'PAGE_SIZE': 1,
+    'PAGE_SIZE': 3,
 
-    # Для авторизации по djoser и JWT токену
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -151,13 +147,11 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,  # для отправли почты
+    'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {},
 }
 
-# Для авторизации по JWT токену
 SIMPLE_JWT = {
-    # Время жизни 2х токенов
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=480),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 
@@ -165,8 +159,8 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
 
-    "ALGORITHM": "HS256",  # алгоритм шифрования
-    "SIGNING_KEY": SECRET_KEY,  # секретный ключ
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
 
     "VERIFYING_KEY": "",
     "AUDIENCE": None,
@@ -175,11 +169,11 @@ SIMPLE_JWT = {
     "JWK_URL": None,
     "LEEWAY": 0,
 
-    "AUTH_HEADER_TYPES": ("Bearer",),  # определяет заголовок перед токеном в заголовке запроса т.е перед JWT-токеном
+    "AUTH_HEADER_TYPES": ("Bearer",),
 
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",  # user_id = id пользователя
+    "USER_ID_CLAIM": "user_id",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
 
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
